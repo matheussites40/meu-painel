@@ -1,0 +1,2569 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Painel Pessoal</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+ --azul:#2563eb;
+ --azul2:#1d4ed8;
+ --fundo:#f1f5f9;
+ --card:#fff;
+ --texto:#1e293b;
+ --texto2:#64748b;
+ --borda:#e2e8f0;
+ --verde:#16a34a;
+ --vermelho:#dc2626;
+ --amarelo:#f59e0b;
+ --roxo:#7c3aed;
+}
+
+body{
+ font-family:Arial,Helvetica,sans-serif;
+ background:var(--fundo);
+ color:var(--texto);
+ min-height:100vh;
+ transition:.2s;
+}
+
+body.dark{
+ --fundo:#0f172a;
+ --card:#1e293b;
+ --texto:#f8fafc;
+ --texto2:#94a3b8;
+ --borda:#334155;
+}
+
+button,input,select,textarea{font:inherit}
+
+button{cursor:pointer}
+
+header{
+ background:linear-gradient(135deg,#2563eb,#1d4ed8);
+ color:#fff;
+ padding:25px 20px;
+ text-align:center;
+}
+
+header h1{font-size:29px;margin-bottom:6px}
+
+nav{
+ background:var(--card);
+ display:flex;
+ justify-content:center;
+ gap:5px;
+ padding:10px;
+ position:sticky;
+ top:0;
+ z-index:100;
+ box-shadow:0 2px 8px #0001;
+ overflow-x:auto;
+}
+
+nav button{
+ border:0;
+ background:transparent;
+ color:var(--texto2);
+ padding:11px 16px;
+ border-radius:8px;
+ font-weight:bold;
+ white-space:nowrap;
+}
+
+nav button:hover,
+nav button.ativo{
+ background:var(--azul);
+ color:#fff;
+}
+
+.container{
+ width:92%;
+ max-width:1200px;
+ margin:28px auto;
+}
+
+.pagina{display:none}
+.pagina.ativa{display:block}
+
+.titulo{
+ margin-bottom:22px;
+}
+
+.titulo h2{
+ font-size:28px;
+ margin-bottom:6px;
+}
+
+.titulo p{color:var(--texto2)}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:18px;
+ margin-bottom:20px;
+}
+
+.grid2{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:20px;
+}
+
+.card,.painel{
+ background:var(--card);
+ border-radius:14px;
+ padding:22px;
+ box-shadow:0 4px 12px #0000000d;
+ margin-bottom:20px;
+}
+
+.card h3{
+ color:var(--texto2);
+ font-size:14px;
+ margin-bottom:9px;
+}
+
+.numero{
+ font-size:27px;
+ font-weight:bold;
+}
+
+.azul{color:var(--azul)}
+.verde{color:var(--verde)}
+.vermelho{color:var(--vermelho)}
+.amarelo{color:var(--amarelo)}
+.roxo{color:var(--roxo)}
+
+.campos{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:14px;
+}
+
+.campo{
+ display:flex;
+ flex-direction:column;
+ gap:6px;
+}
+
+.completo{grid-column:1/-1}
+
+.campo label{
+ font-size:14px;
+ font-weight:bold;
+ color:var(--texto2);
+}
+
+input,select,textarea{
+ width:100%;
+ border:1px solid var(--borda);
+ background:var(--card);
+ color:var(--texto);
+ border-radius:8px;
+ padding:11px;
+ outline:none;
+}
+
+textarea{
+ min-height:85px;
+ resize:vertical;
+}
+
+input:focus,select:focus,textarea:focus{
+ border-color:var(--azul);
+}
+
+.btn{
+ border:0;
+ padding:10px 14px;
+ border-radius:8px;
+ font-weight:bold;
+}
+
+.btn-primary{
+ background:var(--azul);
+ color:white;
+}
+
+.btn-primary:hover{background:var(--azul2)}
+
+.btn-green{background:#dcfce7;color:#15803d}
+.btn-red{background:#fee2e2;color:#b91c1c}
+.btn-yellow{background:#fef3c7;color:#92400e}
+.btn-blue{background:#dbeafe;color:#1d4ed8}
+.btn-purple{background:#ede9fe;color:#6d28d9}
+.btn-gray{background:var(--borda);color:var(--texto)}
+
+.btns{
+ display:flex;
+ flex-wrap:wrap;
+ gap:8px;
+}
+
+.lista{
+ display:flex;
+ flex-direction:column;
+ gap:12px;
+}
+
+.tarefa{
+ border-left:5px solid var(--amarelo);
+ padding:18px;
+ background:var(--card);
+ border-radius:10px;
+ box-shadow:0 2px 8px #0000000b;
+}
+
+.tarefa.alta{border-left-color:var(--vermelho)}
+.tarefa.media{border-left-color:var(--amarelo)}
+.tarefa.baixa{border-left-color:var(--verde)}
+.tarefa.concluida{opacity:.65}
+.tarefa.atrasada{background:#fff5f5}
+
+body.dark .tarefa.atrasada{background:#3b2020}
+
+.titulo-tarefa{
+ font-size:18px;
+ font-weight:bold;
+ margin-bottom:7px;
+}
+
+.descricao{
+ color:var(--texto2);
+ line-height:1.5;
+ margin-bottom:12px;
+}
+
+.tags{
+ display:flex;
+ flex-wrap:wrap;
+ gap:6px;
+ margin-bottom:13px;
+}
+
+.tag{
+ padding:5px 9px;
+ border-radius:15px;
+ font-size:12px;
+ font-weight:bold;
+ background:var(--borda);
+ color:var(--texto2);
+}
+
+.tag.red{background:#fee2e2;color:#b91c1c}
+.tag.yellow{background:#fef3c7;color:#92400e}
+.tag.green{background:#dcfce7;color:#15803d}
+.tag.blue{background:#dbeafe;color:#1d4ed8}
+.tag.purple{background:#ede9fe;color:#6d28d9}
+
+.filtros{
+ display:flex;
+ flex-wrap:wrap;
+ gap:8px;
+ margin-top:12px;
+}
+
+.filtro{
+ border:1px solid var(--borda);
+ background:var(--card);
+ color:var(--texto);
+ padding:8px 13px;
+ border-radius:18px;
+ font-weight:bold;
+}
+
+.filtro.ativo{
+ background:var(--azul);
+ color:#fff;
+ border-color:var(--azul);
+}
+
+.barra{
+ height:12px;
+ background:var(--borda);
+ border-radius:20px;
+ overflow:hidden;
+ margin-top:10px;
+}
+
+.progresso{
+ height:100%;
+ background:linear-gradient(90deg,#2563eb,#22c55e);
+ border-radius:20px;
+}
+
+.linha{
+ display:flex;
+ justify-content:space-between;
+ gap:15px;
+ padding:12px 0;
+ border-bottom:1px solid var(--borda);
+}
+
+.linha:last-child{border-bottom:0}
+
+.vazio{
+ text-align:center;
+ color:var(--texto2);
+ padding:28px;
+}
+
+table{
+ width:100%;
+ border-collapse:collapse;
+ min-width:650px;
+}
+
+th,td{
+ padding:12px;
+ border-bottom:1px solid var(--borda);
+ text-align:left;
+}
+
+th{
+ background:#f8fafc;
+ color:#475569;
+}
+
+body.dark th{background:#172033;color:#cbd5e1}
+
+.tabela{overflow-x:auto}
+
+.cal-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:18px;
+}
+
+.cal-head h3{text-transform:capitalize}
+
+.cal-buttons{
+ display:flex;
+ gap:7px;
+}
+
+.cal-grid{
+ display:grid;
+ grid-template-columns:repeat(7,1fr);
+ border:1px solid var(--borda);
+ overflow:hidden;
+ border-radius:10px;
+}
+
+.cal-week{
+ background:#1e40af;
+ color:#fff;
+ padding:10px 3px;
+ text-align:center;
+ font-weight:bold;
+ font-size:12px;
+}
+
+.dia{
+ min-height:115px;
+ background:var(--card);
+ border-right:1px solid var(--borda);
+ border-top:1px solid var(--borda);
+ padding:7px;
+ cursor:pointer;
+}
+
+.dia:hover{background:#eff6ff}
+
+body.dark .dia:hover{background:#263449}
+
+.dia.outro{opacity:.45}
+
+.dia.hoje{background:#eff6ff}
+body.dark .dia.hoje{background:#172b49}
+
+.num{
+ width:28px;
+ height:28px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:50%;
+ font-weight:bold;
+ margin-bottom:5px;
+}
+
+.hoje .num{
+ background:var(--azul);
+ color:#fff;
+}
+
+.evento{
+ padding:4px;
+ border-radius:4px;
+ font-size:10px;
+ margin-bottom:3px;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis;
+}
+
+.evento.alta{background:#fee2e2;color:#991b1b}
+.evento.media{background:#fef3c7;color:#92400e}
+.evento.baixa{background:#dcfce7;color:#166534}
+
+.grafico{
+ display:flex;
+ align-items:flex-end;
+ gap:10px;
+ height:210px;
+ padding-top:20px;
+}
+
+.coluna-grafico{
+ flex:1;
+ display:flex;
+ flex-direction:column;
+ justify-content:flex-end;
+ height:100%;
+ text-align:center;
+}
+
+.coluna{
+ width:70%;
+ max-width:45px;
+ margin:auto;
+ background:linear-gradient(#2563eb,#60a5fa);
+ border-radius:6px 6px 0 0;
+ min-height:3px;
+}
+
+.coluna-label{
+ font-size:10px;
+ color:var(--texto2);
+ margin-top:5px;
+}
+
+.meta{
+ border:1px solid var(--borda);
+ border-radius:10px;
+ padding:15px;
+ margin-bottom:10px;
+}
+
+.meta h4{margin-bottom:7px}
+
+.meta-progresso{
+ height:9px;
+ background:var(--borda);
+ border-radius:20px;
+ overflow:hidden;
+ margin:9px 0;
+}
+
+.meta-fill{
+ height:100%;
+ background:var(--verde);
+}
+
+.modal-bg{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:#0009;
+ z-index:500;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+}
+
+.modal-bg.aberto{display:flex}
+
+.modal{
+ width:100%;
+ max-width:650px;
+ max-height:90vh;
+ overflow:auto;
+ background:var(--card);
+ border-radius:15px;
+ padding:23px;
+}
+
+.modal-top{
+ display:flex;
+ justify-content:space-between;
+ margin-bottom:18px;
+}
+
+.fechar{
+ border:0;
+ background:var(--borda);
+ color:var(--texto);
+ width:35px;
+ height:35px;
+ border-radius:50%;
+ font-size:20px;
+}
+
+.notificacao{
+ position:fixed;
+ right:20px;
+ bottom:20px;
+ background:#1e293b;
+ color:#fff;
+ padding:14px 18px;
+ border-radius:10px;
+ display:none;
+ z-index:1000;
+ box-shadow:0 8px 25px #0004;
+}
+
+.notificacao.mostrar{display:block}
+
+footer{
+ text-align:center;
+ padding:30px;
+ color:var(--texto2);
+}
+
+@media(max-width:800px){
+ .grid,.grid2{grid-template-columns:1fr}
+ .campos{grid-template-columns:1fr}
+ .completo{grid-column:auto}
+ .dia{min-height:80px}
+ .evento{font-size:8px}
+ nav{justify-content:flex-start}
+ .cal-head{flex-direction:column;gap:12px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🏠 Meu Painel Pessoal</h1>
+<p id="subtitulo">Organize sua vida em um só lugar</p>
+</header>
+
+<nav>
+<button class="ativo" onclick="pagina('inicio',this)">🏠 Início</button>
+<button onclick="pagina('tarefas',this)">📋 Tarefas</button>
+<button onclick="pagina('agenda',this)">📅 Agenda</button>
+<button onclick="pagina('financas',this)">💰 Finanças</button>
+<button onclick="pagina('relatorios',this)">📊 Relatórios</button>
+<button onclick="pagina('metas',this)">🎯 Metas</button>
+<button onclick="pagina('config',this)">⚙️ Configurações</button>
+</nav>
+
+<main class="container">
+
+<!-- ================= INÍCIO ================= -->
+
+<section id="inicio" class="pagina ativa">
+
+<div class="titulo">
+<h2 id="saudacao">👋 Olá!</h2>
+<p id="dataHoje"></p>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h3>💰 Saldo</h3>
+<div id="dashSaldo" class="numero azul">R$ 0,00</div>
+</div>
+
+<div class="card">
+<h3>📈 Receitas</h3>
+<div id="dashReceitas" class="numero verde">R$ 0,00</div>
+</div>
+
+<div class="card">
+<h3>📉 Despesas</h3>
+<div id="dashDespesas" class="numero vermelho">R$ 0,00</div>
+</div>
+
+<div class="card">
+<h3>⏳ Pendentes</h3>
+<div id="dashPendentes" class="numero amarelo">0</div>
+</div>
+
+<div class="card">
+<h3>✅ Concluídas</h3>
+<div id="dashConcluidas" class="numero verde">0</div>
+</div>
+
+<div class="card">
+<h3>📊 Progresso</h3>
+<div id="dashProgresso" class="numero azul">0%</div>
+<div class="barra">
+<div id="barraDash" class="progresso" style="width:0"></div>
+</div>
+</div>
+
+</div>
+
+<div class="grid2">
+
+<div class="painel">
+<h3>📅 Tarefas de hoje</h3>
+<div id="tarefasHoje"></div>
+</div>
+
+<div class="painel">
+<h3>⚠️ Atenção</h3>
+<div id="alertas"></div>
+</div>
+
+</div>
+
+<div class="painel">
+<h3>📌 Próximas tarefas</h3>
+<div id="proximas"></div>
+</div>
+
+<div class="painel">
+<h3>💰 Resumo financeiro</h3>
+<div id="resumoFinanceiro"></div>
+</div>
+
+</section>
+
+
+<!-- ================= TAREFAS ================= -->
+
+<section id="tarefas" class="pagina">
+
+<div class="titulo">
+<h2>📋 Minhas tarefas</h2>
+<p>Organize suas atividades diárias.</p>
+</div>
+
+<div class="painel">
+
+<h3>➕ Nova tarefa</h3>
+
+<br>
+
+<div class="campos">
+
+<div class="campo completo">
+<label>Título</label>
+<input id="tTitulo" placeholder="Ex: Estudar programação">
+</div>
+
+<div class="campo completo">
+<label>Descrição</label>
+<textarea id="tDescricao" placeholder="Detalhes da tarefa"></textarea>
+</div>
+
+<div class="campo">
+<label>Data</label>
+<input id="tData" type="date">
+</div>
+
+<div class="campo">
+<label>Horário</label>
+<input id="tHora" type="time">
+</div>
+
+<div class="campo">
+<label>Prioridade</label>
+<select id="tPrioridade">
+<option value="alta">🔴 Alta</option>
+<option value="media" selected>🟡 Média</option>
+<option value="baixa">🟢 Baixa</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Categoria</label>
+<select id="tCategoria">
+<option>💼 Trabalho</option>
+<option>📚 Estudos</option>
+<option>🏠 Casa</option>
+<option>🏃 Saúde</option>
+<option>👨‍👩‍👧 Pessoal</option>
+<option>💰 Financeiro</option>
+<option>📦 Outros</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Recorrência</label>
+<select id="tRecorrencia">
+<option value="nenhuma">Não repetir</option>
+<option value="diaria">🔁 Diária</option>
+<option value="semanal">🔁 Semanal</option>
+<option value="mensal">🔁 Mensal</option>
+</select>
+</div>
+
+<div class="campo">
+<label>&nbsp;</label>
+<button class="btn btn-primary" onclick="addTarefa()">➕ Adicionar tarefa</button>
+</div>
+
+</div>
+</div>
+
+<div class="painel">
+
+<h3>🔎 Pesquisar</h3>
+
+<br>
+
+<input id="busca" placeholder="Digite para pesquisar..." oninput="renderTarefas()">
+
+<div class="filtros">
+
+<button class="filtro ativo" onclick="filtroStatus('todos',this)">Todas</button>
+<button class="filtro" onclick="filtroStatus('pendente',this)">⏳ Pendentes</button>
+<button class="filtro" onclick="filtroStatus('concluida',this)">✅ Concluídas</button>
+<button class="filtro" onclick="filtroStatus('adiada',this)">⏰ Adiadas</button>
+<button class="filtro" onclick="filtroStatus('cancelada',this)">❌ Canceladas</button>
+
+</div>
+
+<div class="filtros">
+
+<button class="filtro" onclick="filtroData('hoje',this)">📅 Hoje</button>
+<button class="filtro" onclick="filtroData('amanha',this)">📅 Amanhã</button>
+<button class="filtro" onclick="filtroData('semana',this)">📅 Semana</button>
+<button class="filtro" onclick="filtroData('atrasadas',this)">🚨 Atrasadas</button>
+<button class="filtro" onclick="filtroData('todas',this)">📋 Todas as datas</button>
+
+</div>
+
+<p id="contador" style="color:var(--texto2);margin-top:12px"></p>
+
+</div>
+
+<div id="listaTarefas" class="lista"></div>
+
+</section>
+
+
+<!-- ================= AGENDA ================= -->
+
+<section id="agenda" class="pagina">
+
+<div class="titulo">
+<h2>📅 Minha agenda</h2>
+<p>Visualize suas tarefas no calendário.</p>
+</div>
+
+<div class="painel">
+
+<div class="cal-head">
+
+<div class="cal-buttons">
+<button class="btn btn-blue" onclick="mudarMes(-1)">◀</button>
+<button class="btn btn-blue" onclick="hojeCalendario()">Hoje</button>
+<button class="btn btn-blue" onclick="mudarMes(1)">▶</button>
+</div>
+
+<h3 id="mesAno"></h3>
+
+</div>
+
+<div id="calendario" class="cal-grid"></div>
+
+</div>
+
+<div class="painel">
+<div id="tarefasDia">
+<p class="vazio">Clique em um dia do calendário.</p>
+</div>
+</div>
+
+</section>
+
+
+<!-- ================= FINANÇAS ================= -->
+
+<section id="financas" class="pagina">
+
+<div class="titulo">
+<h2>💰 Controle financeiro</h2>
+<p>Controle suas receitas e despesas.</p>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h3>💰 Saldo</h3>
+<div id="saldo" class="numero azul">R$ 0,00</div>
+</div>
+
+<div class="card">
+<h3>📈 Receitas</h3>
+<div id="receitas" class="numero verde">R$ 0,00</div>
+</div>
+
+<div class="card">
+<h3>📉 Despesas</h3>
+<div id="despesas" class="numero vermelho">R$ 0,00</div>
+</div>
+
+</div>
+
+<div class="painel">
+
+<h3>➕ Nova movimentação</h3>
+<br>
+
+<div class="campos">
+
+<div class="campo">
+<label>Descrição</label>
+<input id="fDescricao" placeholder="Ex: Mercado">
+</div>
+
+<div class="campo">
+<label>Valor</label>
+<input id="fValor" type="number" step="0.01" min="0">
+</div>
+
+<div class="campo">
+<label>Tipo</label>
+<select id="fTipo">
+<option value="despesa">💸 Despesa</option>
+<option value="receita">💰 Receita</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Categoria</label>
+<select id="fCategoria">
+<option>🍔 Alimentação</option>
+<option>🚗 Transporte</option>
+<option>🏠 Moradia</option>
+<option>🎮 Lazer</option>
+<option>🏥 Saúde</option>
+<option>📚 Educação</option>
+<option>💼 Trabalho</option>
+<option>📦 Outros</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Data</label>
+<input id="fData" type="date">
+</div>
+
+<div class="campo">
+<label>&nbsp;</label>
+<button class="btn btn-primary" onclick="addFinanca()">➕ Adicionar</button>
+</div>
+
+</div>
+</div>
+
+<div class="painel">
+<h3>📋 Histórico</h3>
+<br>
+
+<div class="tabela">
+<table>
+<thead>
+<tr>
+<th>Data</th>
+<th>Descrição</th>
+<th>Categoria</th>
+<th>Tipo</th>
+<th>Valor</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody id="historico"></tbody>
+</table>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= RELATÓRIOS ================= -->
+
+<section id="relatorios" class="pagina">
+
+<div class="titulo">
+<h2>📊 Relatórios</h2>
+<p>Veja como estão suas finanças e produtividade.</p>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h3>📈 Receita total</h3>
+<div id="relReceita" class="numero verde">R$ 0,00</div>
+</div>
+
+<div class="card">
+<h3>📉 Despesa total</h3>
+<div id="relDespesa" class="numero vermelho">R$ 0,00</div>
+</div>
+
+<div class="card">
+<h3>📊 Resultado</h3>
+<div id="relResultado" class="numero azul">R$ 0,00</div>
+</div>
+
+</div>
+
+<div class="grid2">
+
+<div class="painel">
+<h3>💸 Gastos por categoria</h3>
+<br>
+<div id="categoriasGastos"></div>
+</div>
+
+<div class="painel">
+<h3>📋 Produtividade</h3>
+<br>
+<div id="produtividade"></div>
+</div>
+
+</div>
+
+<div class="painel">
+<h3>📊 Despesas por mês</h3>
+<div id="grafico" class="grafico"></div>
+</div>
+
+</section>
+
+
+<!-- ================= METAS ================= -->
+
+<section id="metas" class="pagina">
+
+<div class="titulo">
+<h2>🎯 Metas financeiras</h2>
+<p>Crie objetivos e acompanhe seu progresso.</p>
+</div>
+
+<div class="painel">
+
+<h3>➕ Nova meta</h3>
+<br>
+
+<div class="campos">
+
+<div class="campo">
+<label>Nome da meta</label>
+<input id="mNome" placeholder="Ex: Comprar computador">
+</div>
+
+<div class="campo">
+<label>Valor objetivo</label>
+<input id="mObjetivo" type="number" step="0.01">
+</div>
+
+<div class="campo">
+<label>Valor já guardado</label>
+<input id="mAtual" type="number" step="0.01">
+</div>
+
+<div class="campo">
+<label>Prazo</label>
+<input id="mPrazo" type="date">
+</div>
+
+<div class="campo completo">
+<button class="btn btn-primary" onclick="addMeta()">🎯 Criar meta</button>
+</div>
+
+</div>
+
+</div>
+
+<div id="listaMetas"></div>
+
+</section>
+
+
+<!-- ================= CONFIGURAÇÕES ================= -->
+
+<section id="config" class="pagina">
+
+<div class="titulo">
+<h2>⚙️ Configurações</h2>
+<p>Personalize seu painel.</p>
+</div>
+
+<div class="painel">
+
+<h3>👤 Seu nome</h3>
+<br>
+
+<div class="campos">
+
+<div class="campo">
+<label>Nome</label>
+<input id="nomeUsuario" placeholder="Digite seu nome">
+</div>
+
+<div class="campo">
+<label>&nbsp;</label>
+<button class="btn btn-primary" onclick="salvarNome()">💾 Salvar nome</button>
+</div>
+
+</div>
+
+</div>
+
+<div class="painel">
+
+<h3>🎨 Aparência</h3>
+<br>
+
+<button class="btn btn-gray" onclick="alternarTema()">
+🌙 Alternar modo claro/escuro
+</button>
+
+</div>
+
+<div class="painel">
+
+<h3>💾 Backup dos dados</h3>
+<br>
+
+<div class="btns">
+
+<button class="btn btn-blue" onclick="exportarDados()">
+📤 Exportar backup
+</button>
+
+<label class="btn btn-green">
+📥 Importar backup
+<input type="file" id="importar" accept=".json" onchange="importarDados(event)" style="display:none">
+</label>
+
+</div>
+
+</div>
+
+<div class="painel">
+
+<h3>⚠️ Zona de perigo</h3>
+<br>
+
+<button class="btn btn-red" onclick="limparTudo()">
+🗑️ Apagar todos os dados
+</button>
+
+</div>
+
+</section>
+
+</main>
+
+
+<!-- ================= MODAL ================= -->
+
+<div id="modal" class="modal-bg">
+
+<div class="modal">
+
+<div class="modal-top">
+<h2>✏️ Editar tarefa</h2>
+<button class="fechar" onclick="fecharModal()">×</button>
+</div>
+
+<input type="hidden" id="editId">
+
+<div class="campos">
+
+<div class="campo completo">
+<label>Título</label>
+<input id="editTitulo">
+</div>
+
+<div class="campo completo">
+<label>Descrição</label>
+<textarea id="editDescricao"></textarea>
+</div>
+
+<div class="campo">
+<label>Data</label>
+<input id="editData" type="date">
+</div>
+
+<div class="campo">
+<label>Horário</label>
+<input id="editHora" type="time">
+</div>
+
+<div class="campo">
+<label>Prioridade</label>
+<select id="editPrioridade">
+<option value="alta">🔴 Alta</option>
+<option value="media">🟡 Média</option>
+<option value="baixa">🟢 Baixa</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Categoria</label>
+<select id="editCategoria">
+<option>💼 Trabalho</option>
+<option>📚 Estudos</option>
+<option>🏠 Casa</option>
+<option>🏃 Saúde</option>
+<option>👨‍👩‍👧 Pessoal</option>
+<option>💰 Financeiro</option>
+<option>📦 Outros</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Recorrência</label>
+<select id="editRecorrencia">
+<option value="nenhuma">Não repetir</option>
+<option value="diaria">Diária</option>
+<option value="semanal">Semanal</option>
+<option value="mensal">Mensal</option>
+</select>
+</div>
+
+<div class="campo">
+<label>Status</label>
+<select id="editStatus">
+<option value="pendente">⏳ Pendente</option>
+<option value="concluida">✅ Concluída</option>
+<option value="adiada">⏰ Adiada</option>
+<option value="cancelada">❌ Cancelada</option>
+</select>
+</div>
+
+</div>
+
+<br>
+
+<div class="btns">
+<button class="btn btn-gray" onclick="fecharModal()">Cancelar</button>
+<button class="btn btn-primary" onclick="salvarEdicao()">💾 Salvar</button>
+</div>
+
+</div>
+</div>
+
+
+<div id="notificacao" class="notificacao"></div>
+
+<footer>
+💾 Seus dados são salvos automaticamente neste navegador.
+</footer>
+
+
+<script>
+
+/* =====================================================
+   BANCO LOCAL
+===================================================== */
+
+let tarefas =
+JSON.parse(localStorage.getItem("tarefas")) || [];
+
+let financas =
+JSON.parse(localStorage.getItem("financas")) || [];
+
+let metas =
+JSON.parse(localStorage.getItem("metas")) || [];
+
+let configuracao =
+JSON.parse(localStorage.getItem("configuracao")) || {
+ nome:"",
+ tema:"claro"
+};
+
+let statusFiltro="todos";
+let dataFiltro="todas";
+
+let dataCal=new Date();
+
+
+/* =====================================================
+   UTILIDADES
+===================================================== */
+
+function hoje(){
+ return new Date().toISOString().slice(0,10);
+}
+
+function dataBR(data){
+ if(!data)return "";
+ const p=data.split("-");
+ return p[2]+"/"+p[1]+"/"+p[0];
+}
+
+function dinheiro(v){
+ return Number(v||0).toLocaleString("pt-BR",{
+  style:"currency",
+  currency:"BRL"
+ });
+}
+
+function id(){
+ return Date.now()+Math.random();
+}
+
+function escapar(t){
+ const d=document.createElement("div");
+ d.textContent=t||"";
+ return d.innerHTML;
+}
+
+function salvar(){
+ localStorage.setItem("tarefas",JSON.stringify(tarefas));
+ localStorage.setItem("financas",JSON.stringify(financas));
+ localStorage.setItem("metas",JSON.stringify(metas));
+}
+
+function aviso(txt){
+ const n=document.getElementById("notificacao");
+ n.textContent=txt;
+ n.classList.add("mostrar");
+ setTimeout(()=>n.classList.remove("mostrar"),2500);
+}
+
+
+/* =====================================================
+   NAVEGAÇÃO
+===================================================== */
+
+function pagina(nome,botao){
+
+ document.querySelectorAll(".pagina")
+ .forEach(x=>x.classList.remove("ativa"));
+
+ document.getElementById(nome)
+ .classList.add("ativa");
+
+ document.querySelectorAll("nav button")
+ .forEach(x=>x.classList.remove("ativo"));
+
+ botao.classList.add("ativo");
+
+ atualizarTudo();
+}
+
+
+/* =====================================================
+   CONFIGURAÇÕES
+===================================================== */
+
+function carregarConfig(){
+
+ if(configuracao.tema==="escuro"){
+  document.body.classList.add("dark");
+ }
+
+ document.getElementById("nomeUsuario").value=
+ configuracao.nome||"";
+
+ document.getElementById("subtitulo").textContent=
+ configuracao.nome
+ ? "Bem-vindo, "+configuracao.nome+"!"
+ : "Organize sua vida em um só lugar";
+}
+
+function salvarNome(){
+
+ configuracao.nome=
+ document.getElementById("nomeUsuario").value.trim();
+
+ localStorage.setItem(
+  "configuracao",
+  JSON.stringify(configuracao)
+ );
+
+ carregarConfig();
+ atualizarDashboard();
+
+ aviso("👤 Nome salvo!");
+}
+
+function alternarTema(){
+
+ configuracao.tema=
+ configuracao.tema==="escuro"
+ ?"claro"
+ :"escuro";
+
+ localStorage.setItem(
+  "configuracao",
+  JSON.stringify(configuracao)
+ );
+
+ carregarConfig();
+}
+
+function exportarDados(){
+
+ const dados={
+  tarefas,
+  financas,
+  metas,
+  configuracao
+ };
+
+ const blob=new Blob(
+  [JSON.stringify(dados,null,2)],
+  {type:"application/json"}
+ );
+
+ const url=URL.createObjectURL(blob);
+
+ const a=document.createElement("a");
+
+ a.href=url;
+ a.download="backup-painel.json";
+ a.click();
+
+ URL.revokeObjectURL(url);
+
+ aviso("📤 Backup exportado!");
+}
+
+function importarDados(event){
+
+ const arquivo=event.target.files[0];
+
+ if(!arquivo)return;
+
+ const leitor=new FileReader();
+
+ leitor.onload=function(e){
+
+  try{
+
+   const dados=JSON.parse(e.target.result);
+
+   tarefas=dados.tarefas||[];
+   financas=dados.financas||[];
+   metas=dados.metas||[];
+
+   configuracao=dados.configuracao||{
+    nome:"",
+    tema:"claro"
+   };
+
+   salvar();
+
+   localStorage.setItem(
+    "configuracao",
+    JSON.stringify(configuracao)
+   );
+
+   carregarConfig();
+   atualizarTudo();
+
+   aviso("📥 Backup importado!");
+
+  }catch{
+
+   alert("Arquivo de backup inválido.");
+
+  }
+
+ };
+
+ leitor.readAsText(arquivo);
+}
+
+function limparTudo(){
+
+ if(!confirm(
+ "ATENÇÃO!\n\nIsso apagará todas as tarefas, finanças e metas.\n\nContinuar?"
+ ))return;
+
+ tarefas=[];
+ financas=[];
+ metas=[];
+
+ salvar();
+
+ atualizarTudo();
+
+ aviso("🗑️ Dados apagados.");
+}
+
+
+/* =====================================================
+   TAREFAS
+===================================================== */
+
+function addTarefa(){
+
+ const titulo=
+ document.getElementById("tTitulo").value.trim();
+
+ const data=
+ document.getElementById("tData").value;
+
+ if(!titulo||!data){
+  alert("Informe o título e a data.");
+  return;
+ }
+
+ tarefas.push({
+  id:id(),
+  titulo,
+  descricao:document.getElementById("tDescricao").value.trim(),
+  data,
+  hora:document.getElementById("tHora").value,
+  prioridade:document.getElementById("tPrioridade").value,
+  categoria:document.getElementById("tCategoria").value,
+  recorrencia:document.getElementById("tRecorrencia").value,
+  status:"pendente"
+ });
+
+ salvar();
+
+ document.getElementById("tTitulo").value="";
+ document.getElementById("tDescricao").value="";
+ document.getElementById("tHora").value="";
+
+ atualizarTudo();
+
+ aviso("✅ Tarefa criada!");
+}
+
+function atrasada(t){
+
+ return t.status==="pendente" &&
+ t.data<hoje();
+}
+
+function filtroStatus(f,b){
+
+ statusFiltro=f;
+
+ document.querySelectorAll(".filtro")
+ .forEach(x=>x.classList.remove("ativo"));
+
+ b.classList.add("ativo");
+
+ renderTarefas();
+}
+
+function filtroData(f,b){
+
+ dataFiltro=f;
+ statusFiltro="todos";
+
+ document.querySelectorAll(".filtro")
+ .forEach(x=>x.classList.remove("ativo"));
+
+ b.classList.add("ativo");
+
+ renderTarefas();
+}
+
+function pertenceData(t){
+
+ if(dataFiltro==="todas")return true;
+
+ const h=new Date();
+
+ const d=new Date(t.data+"T00:00:00");
+
+ if(dataFiltro==="hoje")
+  return t.data===hoje();
+
+ if(dataFiltro==="amanha"){
+  const a=new Date();
+  a.setDate(a.getDate()+1);
+  return t.data===a.toISOString().slice(0,10);
+ }
+
+ if(dataFiltro==="atrasadas")
+  return atrasada(t);
+
+ if(dataFiltro==="semana"){
+
+  const dia=h.getDay();
+  const dif=dia===0?-6:1-dia;
+
+  const inicio=new Date(h);
+  inicio.setDate(h.getDate()+dif);
+  inicio.setHours(0,0,0,0);
+
+  const fim=new Date(inicio);
+  fim.setDate(inicio.getDate()+6);
+  fim.setHours(23,59,59,999);
+
+  return d>=inicio&&d<=fim;
+ }
+
+ return true;
+}
+
+function renderTarefas(){
+
+ const busca=
+ document.getElementById("busca").value
+ .toLowerCase().trim();
+
+ let lista=tarefas.filter(t=>{
+
+  const status=
+  statusFiltro==="todos" ||
+  t.status===statusFiltro;
+
+  const periodo=pertenceData(t);
+
+  const texto=
+  (t.titulo+" "+t.descricao+" "+t.categoria)
+  .toLowerCase();
+
+  return status&&periodo&&
+  (!busca||texto.includes(busca));
+ });
+
+ lista.sort((a,b)=>
+ (a.data+(a.hora||""))
+ .localeCompare(b.data+(b.hora||""))
+ );
+
+ document.getElementById("contador").textContent=
+ lista.length+
+ (lista.length===1?" tarefa":" tarefas");
+
+ const area=document.getElementById("listaTarefas");
+
+ area.innerHTML="";
+
+ if(!lista.length){
+  area.innerHTML=
+  '<div class="painel vazio">📋<br><br>Nenhuma tarefa encontrada.</div>';
+  return;
+ }
+
+ lista.forEach(t=>{
+  area.appendChild(cardTarefa(t));
+ });
+}
+
+function cardTarefa(t){
+
+ const div=document.createElement("div");
+
+ div.className="tarefa "+t.prioridade;
+
+ if(t.status==="concluida")
+  div.classList.add("concluida");
+
+ if(atrasada(t))
+  div.classList.add("atrasada");
+
+ const prioridade=
+ t.prioridade==="alta"
+ ?"🔴 Alta"
+ :t.prioridade==="media"
+ ?"🟡 Média"
+ :"🟢 Baixa";
+
+ const status=
+ t.status==="pendente"
+ ?"⏳ Pendente"
+ :t.status==="concluida"
+ ?"✅ Concluída"
+ :t.status==="adiada"
+ ?"⏰ Adiada"
+ :"❌ Cancelada";
+
+ let botoes="";
+
+ if(t.status!=="concluida"){
+  botoes+=
+  `<button class="btn btn-green"
+  onclick="concluir(${t.id})">✅ Concluir</button>`;
+ }
+
+ if(t.status!=="concluida"&&t.status!=="cancelada"){
+  botoes+=
+  `<button class="btn btn-blue"
+  onclick="adiar(${t.id})">⏰ Adiar</button>`;
+ }
+
+ botoes+=
+ `<button class="btn btn-purple"
+ onclick="editar(${t.id})">✏️ Editar</button>`;
+
+ if(t.status!=="cancelada"&&t.status!=="concluida"){
+  botoes+=
+  `<button class="btn btn-gray"
+  onclick="cancelar(${t.id})">❌ Cancelar</button>`;
+ }
+
+ botoes+=
+ `<button class="btn btn-red"
+ onclick="excluirTarefa(${t.id})">🗑️ Excluir</button>`;
+
+ div.innerHTML=`
+
+ <div class="titulo-tarefa">
+ ${escapar(t.titulo)}
+ </div>
+
+ ${t.descricao?
+ `<div class="descricao">${escapar(t.descricao)}</div>`
+ :""}
+
+ <div class="tags">
+
+ <span class="tag">
+ 📅 ${dataBR(t.data)}
+ ${t.hora?" • ⏰ "+t.hora:""}
+ </span>
+
+ <span class="tag">${prioridade}</span>
+
+ <span class="tag">${escapar(t.categoria)}</span>
+
+ <span class="tag">${status}</span>
+
+ ${t.recorrencia!=="nenhuma"
+ ?'<span class="tag purple">🔁 Recorrente</span>'
+ :""}
+
+ ${atrasada(t)
+ ?'<span class="tag red">🚨 Atrasada</span>'
+ :""}
+
+ </div>
+
+ <div class="btns">${botoes}</div>
+
+ `;
+
+ return div;
+}
+
+function concluir(idT){
+
+ const t=tarefas.find(x=>x.id===idT);
+
+ if(!t)return;
+
+ t.status="concluida";
+
+ if(t.recorrencia!=="nenhuma")
+ criarRecorrente(t);
+
+ salvar();
+ atualizarTudo();
+
+ aviso("🎉 Tarefa concluída!");
+}
+
+function criarRecorrente(t){
+
+ let nova=new Date(t.data+"T00:00:00");
+
+ if(t.recorrencia==="diaria")
+  nova.setDate(nova.getDate()+1);
+
+ if(t.recorrencia==="semanal")
+  nova.setDate(nova.getDate()+7);
+
+ if(t.recorrencia==="mensal")
+  nova.setMonth(nova.getMonth()+1);
+
+ tarefas.push({
+  ...t,
+  id:id(),
+  data:nova.toISOString().slice(0,10),
+  status:"pendente"
+ });
+}
+
+function adiar(idT){
+
+ const t=tarefas.find(x=>x.id===idT);
+
+ if(!t)return;
+
+ const nova=prompt(
+ "Digite a nova data (AAAA-MM-DD):",
+ t.data
+ );
+
+ if(!nova)return;
+
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(nova)){
+  alert("Data inválida.");
+  return;
+ }
+
+ t.data=nova;
+ t.status="adiada";
+
+ salvar();
+ atualizarTudo();
+
+ aviso("⏰ Tarefa adiada!");
+}
+
+function cancelar(idT){
+
+ const t=tarefas.find(x=>x.id===idT);
+
+ if(!t)return;
+
+ t.status="cancelada";
+
+ salvar();
+ atualizarTudo();
+
+ aviso("❌ Tarefa cancelada.");
+}
+
+function excluirTarefa(idT){
+
+ if(!confirm("Excluir esta tarefa?"))return;
+
+ tarefas=tarefas.filter(x=>x.id!==idT);
+
+ salvar();
+ atualizarTudo();
+
+ aviso("🗑️ Tarefa excluída.");
+}
+
+
+/* =====================================================
+   EDITAR
+===================================================== */
+
+function editar(idT){
+
+ const t=tarefas.find(x=>x.id===idT);
+
+ if(!t)return;
+
+ document.getElementById("editId").value=t.id;
+ document.getElementById("editTitulo").value=t.titulo;
+ document.getElementById("editDescricao").value=t.descricao||"";
+ document.getElementById("editData").value=t.data;
+ document.getElementById("editHora").value=t.hora||"";
+ document.getElementById("editPrioridade").value=t.prioridade;
+ document.getElementById("editCategoria").value=t.categoria;
+ document.getElementById("editRecorrencia").value=t.recorrencia;
+ document.getElementById("editStatus").value=t.status;
+
+ document.getElementById("modal").classList.add("aberto");
+}
+
+function fecharModal(){
+ document.getElementById("modal").classList.remove("aberto");
+}
+
+function salvarEdicao(){
+
+ const idT=
+ Number(document.getElementById("editId").value);
+
+ const t=tarefas.find(x=>x.id===idT);
+
+ if(!t)return;
+
+ t.titulo=
+ document.getElementById("editTitulo").value.trim();
+
+ t.descricao=
+ document.getElementById("editDescricao").value.trim();
+
+ t.data=
+ document.getElementById("editData").value;
+
+ t.hora=
+ document.getElementById("editHora").value;
+
+ t.prioridade=
+ document.getElementById("editPrioridade").value;
+
+ t.categoria=
+ document.getElementById("editCategoria").value;
+
+ t.recorrencia=
+ document.getElementById("editRecorrencia").value;
+
+ t.status=
+ document.getElementById("editStatus").value;
+
+ if(!t.titulo||!t.data){
+  alert("Título e data são obrigatórios.");
+  return;
+ }
+
+ salvar();
+ fecharModal();
+ atualizarTudo();
+
+ aviso("💾 Tarefa atualizada!");
+}
+
+
+/* =====================================================
+   FINANÇAS
+===================================================== */
+
+function addFinanca(){
+
+ const descricao=
+ document.getElementById("fDescricao").value.trim();
+
+ const valor=
+ Number(document.getElementById("fValor").value);
+
+ const data=
+ document.getElementById("fData").value;
+
+ if(!descricao||!valor||valor<=0||!data){
+  alert("Preencha os campos corretamente.");
+  return;
+ }
+
+ financas.push({
+  id:id(),
+  descricao,
+  valor,
+  tipo:document.getElementById("fTipo").value,
+  categoria:document.getElementById("fCategoria").value,
+  data
+ });
+
+ salvar();
+
+ document.getElementById("fDescricao").value="";
+ document.getElementById("fValor").value="";
+
+ atualizarTudo();
+
+ aviso("💰 Lançamento adicionado!");
+}
+
+function renderFinancas(){
+
+ let receitas=0;
+ let despesas=0;
+
+ financas.forEach(f=>{
+  if(f.tipo==="receita")
+   receitas+=Number(f.valor);
+  else
+   despesas+=Number(f.valor);
+ });
+
+ const saldo=receitas-despesas;
+
+ document.getElementById("saldo").textContent=dinheiro(saldo);
+ document.getElementById("receitas").textContent=dinheiro(receitas);
+ document.getElementById("despesas").textContent=dinheiro(despesas);
+
+ document.getElementById("dashSaldo").textContent=dinheiro(saldo);
+ document.getElementById("dashReceitas").textContent=dinheiro(receitas);
+ document.getElementById("dashDespesas").textContent=dinheiro(despesas);
+
+ document.getElementById("relReceita").textContent=dinheiro(receitas);
+ document.getElementById("relDespesa").textContent=dinheiro(despesas);
+ document.getElementById("relResultado").textContent=dinheiro(saldo);
+
+ const tabela=document.getElementById("historico");
+
+ tabela.innerHTML="";
+
+ [...financas]
+ .sort((a,b)=>b.data.localeCompare(a.data))
+ .forEach(f=>{
+
+  const tr=document.createElement("tr");
+
+  tr.innerHTML=`
+
+  <td>${dataBR(f.data)}</td>
+
+  <td>${escapar(f.descricao)}</td>
+
+  <td>${escapar(f.categoria)}</td>
+
+  <td>
+  ${f.tipo==="receita"?"💰 Receita":"💸 Despesa"}
+  </td>
+
+  <td style="
+  color:${f.tipo==="receita"?"#16a34a":"#dc2626"};
+  font-weight:bold">
+  ${dinheiro(f.valor)}
+  </td>
+
+  <td>
+  <button class="btn btn-red"
+  onclick="excluirFinanca(${f.id})">
+  🗑️
+  </button>
+  </td>
+
+  `;
+
+  tabela.appendChild(tr);
+ });
+}
+
+function excluirFinanca(idF){
+
+ if(!confirm("Excluir este lançamento?"))return;
+
+ financas=financas.filter(x=>x.id!==idF);
+
+ salvar();
+ atualizarTudo();
+
+ aviso("🗑️ Lançamento excluído.");
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+function atualizarDashboard(){
+
+ const h=new Date();
+ const hora=h.getHours();
+
+ let s=
+ hora<12?"☀️ Bom dia":
+ hora<18?"🌤️ Boa tarde":
+ "🌙 Boa noite";
+
+ document.getElementById("saudacao").textContent=
+ configuracao.nome
+ ?s+", "+configuracao.nome+"!"
+ :s+"!";
+
+ document.getElementById("dataHoje").textContent=
+ h.toLocaleDateString("pt-BR",{
+  weekday:"long",
+  day:"numeric",
+  month:"long",
+  year:"numeric"
+ });
+
+ const pendentes=
+ tarefas.filter(x=>x.status==="pendente").length;
+
+ const concluidas=
+ tarefas.filter(x=>x.status==="concluida").length;
+
+ const total=tarefas.length;
+
+ const progresso=
+ total?Math.round(concluidas/total*100):0;
+
+ document.getElementById("dashPendentes").textContent=pendentes;
+ document.getElementById("dashConcluidas").textContent=concluidas;
+ document.getElementById("dashProgresso").textContent=progresso+"%";
+ document.getElementById("barraDash").style.width=progresso+"%";
+
+ const hojeLista=
+ tarefas
+ .filter(x=>x.data===hoje())
+ .sort((a,b)=>(a.hora||"").localeCompare(b.hora||""));
+
+ const area=document.getElementById("tarefasHoje");
+
+ area.innerHTML="";
+
+ if(!hojeLista.length){
+  area.innerHTML='<div class="vazio">🎉 Nenhuma tarefa hoje.</div>';
+ }else{
+
+  hojeLista.forEach(t=>{
+   const d=document.createElement("div");
+   d.className="linha";
+
+   d.innerHTML=`
+   <span>
+   <strong>${escapar(t.titulo)}</strong><br>
+   <small style="color:var(--texto2)">
+   ${t.hora?"⏰ "+t.hora+" • ":""}
+   ${escapar(t.categoria)}
+   </small>
+   </span>
+   <span>${t.status==="concluida"?"✅":"⏳"}</span>
+   `;
+
+   area.appendChild(d);
+  });
+ }
+
+ const prox=
+ tarefas
+ .filter(x=>
+  x.data>=hoje() &&
+  x.status!=="concluida" &&
+  x.status!=="cancelada"
+ )
+ .sort((a,b)=>
+  (a.data+(a.hora||""))
+  .localeCompare(b.data+(b.hora||""))
+ )
+ .slice(0,5);
+
+ const p=document.getElementById("proximas");
+ p.innerHTML="";
+
+ if(!prox.length){
+  p.innerHTML='<div class="vazio">Nenhuma tarefa programada.</div>';
+ }else{
+  prox.forEach(t=>{
+   p.innerHTML+=`
+   <div class="linha">
+   <span>
+   <strong>${escapar(t.titulo)}</strong><br>
+   <small style="color:var(--texto2)">
+   📅 ${dataBR(t.data)}
+   ${t.hora?" • ⏰ "+t.hora:""}
+   </small>
+   </span>
+   <span>${t.prioridade==="alta"?"🔴":t.prioridade==="media"?"🟡":"🟢"}</span>
+   </div>`;
+  });
+ }
+
+ const atrasadas=
+ tarefas.filter(x=>atrasada(x));
+
+ const altas=
+ tarefas.filter(x=>
+  x.status==="pendente" &&
+  x.prioridade==="alta"
+ );
+
+ const alert=document.getElementById("alertas");
+
+ alert.innerHTML="";
+
+ if(!atrasadas.length&&!altas.length){
+  alert.innerHTML='<div class="vazio">🎉 Tudo em ordem!</div>';
+ }else{
+
+  if(atrasadas.length)
+   alert.innerHTML+=`
+   <div class="linha">
+   <span>🚨 Tarefas atrasadas</span>
+   <strong class="vermelho">${atrasadas.length}</strong>
+   </div>`;
+
+  if(altas.length)
+   alert.innerHTML+=`
+   <div class="linha">
+   <span>🔴 Alta prioridade</span>
+   <strong class="amarelo">${altas.length}</strong>
+   </div>`;
+ }
+
+ const resumo=document.getElementById("resumoFinanceiro");
+
+ let r=0,d=0;
+
+ financas.forEach(f=>{
+  if(f.tipo==="receita")r+=Number(f.valor);
+  else d+=Number(f.valor);
+ });
+
+ resumo.innerHTML=`
+ <div class="linha">
+ <span>📈 Receitas</span>
+ <strong class="verde">${dinheiro(r)}</strong>
+ </div>
+
+ <div class="linha">
+ <span>📉 Despesas</span>
+ <strong class="vermelho">${dinheiro(d)}</strong>
+ </div>
+
+ <div class="linha">
+ <span>💰 Saldo</span>
+ <strong class="azul">${dinheiro(r-d)}</strong>
+ </div>
+ `;
+}
+
+
+/* =====================================================
+   RELATÓRIOS
+===================================================== */
+
+function renderRelatorios(){
+
+ const categorias={};
+
+ financas
+ .filter(f=>f.tipo==="despesa")
+ .forEach(f=>{
+  categorias[f.categoria]=
+  (categorias[f.categoria]||0)+Number(f.valor);
+ });
+
+ const area=document.getElementById("categoriasGastos");
+
+ area.innerHTML="";
+
+ const ordenadas=
+ Object.entries(categorias)
+ .sort((a,b)=>b[1]-a[1]);
+
+ if(!ordenadas.length){
+  area.innerHTML='<div class="vazio">Nenhuma despesa cadastrada.</div>';
+ }else{
+
+  ordenadas.forEach(([cat,val])=>{
+   area.innerHTML+=`
+   <div class="linha">
+   <span>${escapar(cat)}</span>
+   <strong class="vermelho">${dinheiro(val)}</strong>
+   </div>`;
+  });
+ }
+
+ const concl=
+ tarefas.filter(t=>t.status==="concluida").length;
+
+ const pend=
+ tarefas.filter(t=>t.status==="pendente").length;
+
+ const atras=
+ tarefas.filter(t=>atrasada(t)).length;
+
+ document.getElementById("produtividade").innerHTML=`
+
+ <div class="linha">
+ <span>✅ Concluídas</span>
+ <strong class="verde">${concl}</strong>
+ </div>
+
+ <div class="linha">
+ <span>⏳ Pendentes</span>
+ <strong class="amarelo">${pend}</strong>
+ </div>
+
+ <div class="linha">
+ <span>🚨 Atrasadas</span>
+ <strong class="vermelho">${atras}</strong>
+ </div>
+
+ `;
+
+ renderGrafico();
+}
+
+function renderGrafico(){
+
+ const area=document.getElementById("grafico");
+
+ area.innerHTML="";
+
+ const meses=[];
+
+ for(let i=5;i>=0;i--){
+
+  const d=new Date();
+
+  d.setMonth(d.getMonth()-i);
+
+  const chave=
+  d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+
+  meses.push({
+   chave,
+   nome:d.toLocaleDateString("pt-BR",{month:"short"})
+  });
+ }
+
+ const valores=meses.map(m=>
+  financas
+  .filter(f=>
+   f.tipo==="despesa" &&
+   f.data.startsWith(m.chave)
+  )
+  .reduce((s,f)=>s+Number(f.valor),0)
+ );
+
+ const max=Math.max(...valores,1);
+
+ valores.forEach((v,i)=>{
+
+  const div=document.createElement("div");
+
+  div.className="coluna-grafico";
+
+  const altura=(v/max)*160;
+
+  div.innerHTML=`
+  <small>${dinheiro(v)}</small>
+  <div class="coluna" style="height:${Math.max(3,altura)}px"></div>
+  <div class="coluna-label">${meses[i].nome}</div>
+  `;
+
+  area.appendChild(div);
+ });
+}
+
+
+/* =====================================================
+   METAS
+===================================================== */
+
+function addMeta(){
+
+ const nome=
+ document.getElementById("mNome").value.trim();
+
+ const objetivo=
+ Number(document.getElementById("mObjetivo").value);
+
+ const atual=
+ Number(document.getElementById("mAtual").value)||0;
+
+ const prazo=
+ document.getElementById("mPrazo").value;
+
+ if(!nome||!objetivo||objetivo<=0){
+  alert("Informe nome e valor objetivo.");
+  return;
+ }
+
+ metas.push({
+  id:id(),
+  nome,
+  objetivo,
+  atual,
+  prazo
+ });
+
+ salvar();
+
+ document.getElementById("mNome").value="";
+ document.getElementById("mObjetivo").value="";
+ document.getElementById("mAtual").value="";
+
+ renderMetas();
+
+ aviso("🎯 Meta criada!");
+}
+
+function renderMetas(){
+
+ const area=document.getElementById("listaMetas");
+
+ area.innerHTML="";
+
+ if(!metas.length){
+  area.innerHTML=
+  '<div class="painel vazio">🎯 Nenhuma meta criada.</div>';
+  return;
+ }
+
+ metas.forEach(m=>{
+
+  const percentual=
+  Math.min(100,Math.round(m.atual/m.objetivo*100));
+
+  const div=document.createElement("div");
+
+  div.className="meta";
+
+  div.innerHTML=`
+
+  <h4>🎯 ${escapar(m.nome)}</h4>
+
+  <div style="color:var(--texto2)">
+  ${dinheiro(m.atual)}
+  de
+  ${dinheiro(m.objetivo)}
+  </div>
+
+  <div class="meta-progresso">
+  <div class="meta-fill"
+  style="width:${percentual}%"></div>
+  </div>
+
+  <div class="linha">
+
+  <span>
+  ${percentual}% concluído
+  </span>
+
+  <span>
+  ${m.prazo?"📅 "+dataBR(m.prazo):""}
+  </span>
+
+  </div>
+
+  <div class="btns">
+
+  <button class="btn btn-green"
+  onclick="adicionarMeta(${m.id})">
+  💵 Adicionar dinheiro
+  </button>
+
+  <button class="btn btn-red"
+  onclick="excluirMeta(${m.id})">
+  🗑️ Excluir
+  </button>
+
+  </div>
+
+  `;
+
+  area.appendChild(div);
+ });
+}
+
+function adicionarMeta(idM){
+
+ const m=metas.find(x=>x.id===idM);
+
+ if(!m)return;
+
+ const valor=Number(prompt(
+ "Quanto deseja adicionar à meta?"
+ ));
+
+ if(!valor||valor<=0)return;
+
+ m.atual+=valor;
+
+ salvar();
+ renderMetas();
+
+ aviso("💰 Meta atualizada!");
+}
+
+function excluirMeta(idM){
+
+ if(!confirm("Excluir esta meta?"))return;
+
+ metas=metas.filter(x=>x.id!==idM);
+
+ salvar();
+ renderMetas();
+}
+
+
+/* =====================================================
+   CALENDÁRIO
+===================================================== */
+
+function renderCalendario(){
+
+ const area=document.getElementById("calendario");
+
+ area.innerHTML="";
+
+ const ano=dataCal.getFullYear();
+ const mes=dataCal.getMonth();
+
+ document.getElementById("mesAno").textContent=
+ dataCal.toLocaleDateString("pt-BR",{
+  month:"long",
+  year:"numeric"
+ });
+
+ ["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"]
+ .forEach(n=>{
+  const d=document.createElement("div");
+  d.className="cal-week";
+  d.textContent=n;
+  area.appendChild(d);
+ });
+
+ const primeiro=new Date(ano,mes,1);
+ let inicio=primeiro.getDay();
+
+ inicio=inicio===0?6:inicio-1;
+
+ const ultimo=new Date(ano,mes+1,0).getDate();
+
+ for(let i=inicio-1;i>=0;i--){
+
+  const d=new Date(ano,mes-1,new Date(ano,mes,0).getDate()-i);
+
+  area.appendChild(criarDia(d,true));
+ }
+
+ for(let i=1;i<=ultimo;i++){
+
+  const d=new Date(ano,mes,i);
+
+  area.appendChild(criarDia(d,false));
+ }
+
+ const resto=area.children.length%7;
+
+ if(resto){
+
+  for(let i=1;i<=7-resto;i++){
+
+   const d=new Date(ano,mes+1,i);
+
+   area.appendChild(criarDia(d,true));
+  }
+ }
+}
+
+function criarDia(d,outro){
+
+ const div=document.createElement("div");
+
+ div.className="dia";
+
+ if(outro)div.classList.add("outro");
+
+ const texto=d.toISOString().slice(0,10);
+
+ if(texto===hoje())div.classList.add("hoje");
+
+ div.innerHTML=
+ `<div class="num">${d.getDate()}</div>`;
+
+ const lista=
+ tarefas.filter(t=>t.data===texto).slice(0,3);
+
+ lista.forEach(t=>{
+
+  const e=document.createElement("div");
+
+  e.className="evento "+t.prioridade;
+
+  e.textContent=
+  (t.hora?t.hora+" ":"")+t.titulo;
+
+  div.appendChild(e);
+ });
+
+ if(tarefas.filter(t=>t.data===texto).length>3){
+
+  const e=document.createElement("small");
+
+  e.style.color="var(--azul)";
+
+  e.textContent=
+  "+"+
+  (tarefas.filter(t=>t.data===texto).length-3)+
+  " tarefas";
+
+  div.appendChild(e);
+ }
+
+ div.onclick=()=>mostrarDia(d);
+
+ return div;
+}
+
+function mostrarDia(d){
+
+ const texto=d.toISOString().slice(0,10);
+
+ const lista=tarefas.filter(t=>t.data===texto);
+
+ const area=document.getElementById("tarefasDia");
+
+ area.innerHTML=
+ `<h3>📋 Tarefas de ${d.toLocaleDateString("pt-BR")}</h3><br>`;
+
+ if(!lista.length){
+  area.innerHTML+=
+  '<p class="vazio">Nenhuma tarefa neste dia.</p>';
+  return;
+ }
+
+ lista.forEach(t=>{
+  area.innerHTML+=`
+  <div class="linha">
+  <span>
+  <strong>${escapar(t.titulo)}</strong><br>
+  <small style="color:var(--texto2)">
+  ${t.hora?"⏰ "+t.hora+" • ":""}
+  ${escapar(t.categoria)}
+  </small>
+  </span>
+  <span>
+  ${t.status==="concluida"?"✅":"⏳"}
+  </span>
+  </div>`;
+ });
+}
+
+function mudarMes(n){
+
+ dataCal.setMonth(dataCal.getMonth()+n);
+
+ renderCalendario();
+}
+
+function hojeCalendario(){
+
+ dataCal=new Date();
+
+ renderCalendario();
+}
+
+
+/* =====================================================
+   ATUALIZAÇÃO GERAL
+===================================================== */
+
+function atualizarTudo(){
+
+ atualizarDashboard();
+ renderFinancas();
+ renderTarefas();
+ renderRelatorios();
+ renderMetas();
+ renderCalendario();
+}
+
+
+/* =====================================================
+   INICIALIZAÇÃO
+===================================================== */
+
+function inicializar(){
+
+ const h=hoje();
+
+ document.getElementById("tData").value=h;
+ document.getElementById("fData").value=h;
+
+ carregarConfig();
+
+ atualizarTudo();
+}
+
+inicializar();
+
+
+/* FECHAR MODAL AO CLICAR FORA */
+
+document.getElementById("modal")
+.addEventListener("click",function(e){
+
+ if(e.target===this)
+  fecharModal();
+
+});
+
+</script>
+
+</body>
+</html>
